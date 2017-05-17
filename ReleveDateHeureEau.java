@@ -22,4 +22,19 @@ public class ReleveDateHeureEau {
 		System.out.println("nomDuLieu "+nomDuLieu+" HauteurEau "+HauteurEau);
 		dateDuReleve.afficher();
 	}
+
+	
+	
+	/*Getter*/
+	public double getHauteurEau() {
+		return HauteurEau;
+	}
+	public String getNomDuLieu() {
+		return nomDuLieu;
+	}
+	public Calendrier getDateDuReleve() {
+		return dateDuReleve;
+	}
+	
+	
 }

@@ -19,11 +19,11 @@ public final class Annee {
 		return listeDeMois;
 	}
 	/**Renvoie le mois à la postion X*/
-	public Mois getListeDeMois(int position) {
+	public Mois getListeDeMois(int position) throws IndexOutOfBoundsException {
 		return listeDeMois.get(position);
 	}
 	/**Renvoie la position du mois Y */
-	public int getListeDeMois(Mois mois) {
+	public int getListeDeMois(Mois mois)  throws IndexOutOfBoundsException {
 		int compteur=0;
 		for (Mois mois2 : listeDeMois) {
 			if (mois.getNumeroMois()==mois2.getNumeroMois()) {
@@ -50,7 +50,7 @@ public final class Annee {
 		this.listeDeMois.add(listeDeMois);
 	}
 	/**Remplacement d'un élément dans la liste*/
-	public void setListeDeMois(int position, Mois listeDeMois) {
+	public void setListeDeMois(int position, Mois listeDeMois) throws IndexOutOfBoundsException{
 		this.listeDeMois.set(position, listeDeMois);
 	}
 	

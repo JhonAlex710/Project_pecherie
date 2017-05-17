@@ -21,13 +21,13 @@ public final class Mois {
 	/**
 	 * renvoie un seul élément de la liste celui de la position X
 	 * */
-	public Jours getListedeJours(int position) {
+	public Jours getListedeJours(int position) throws IndexOutOfBoundsException{
 		return listedeJours.get(position);
 	}
 	/**
 	 * Renvoie la position de l"élement X
 	 * */
-	public int getListedeJours(Jours position) {
+	public int getListedeJours(Jours position) throws IndexOutOfBoundsException {
 		int compteur = 0;
 		for (Jours jours : listedeJours) {
 			if (jours.getNumeroJours()==position.getNumeroJours()) {
@@ -55,7 +55,7 @@ public final class Mois {
 		this.listedeJours.add(listedeJours);
 	}
 	/**Ajouter un élément à la collection*/
-	public void setListedeJours(int position, Jours listedeJours) {
+	public void setListedeJours(int position, Jours listedeJours) throws IndexOutOfBoundsException{
 		this.listedeJours.set(position,listedeJours);
 	}
 	

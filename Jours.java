@@ -17,11 +17,11 @@ public final class Jours {
 		return listedeDonnes;
 	}
 	/** Renvoie un element à la position X*/
-	public ReleveDateHeureEau getListedeDonnes(int position) {
+	public ReleveDateHeureEau getListedeDonnes(int position) throws IndexOutOfBoundsException{
 		return listedeDonnes.get(position);
 	}
 	/** Renvoie la position Xde l'élément Y*/
-	public int getListedeDonnes(ReleveDateHeureEau listedeDonnes) {
+	public int getListedeDonnes(ReleveDateHeureEau listedeDonnes)  throws IndexOutOfBoundsException {
 		int compteur = 0;
 		for (ReleveDateHeureEau releveDateHeureEau : this.listedeDonnes) {
 			if (listedeDonnes.getHauteurEau()==releveDateHeureEau.getHauteurEau()) {
@@ -48,7 +48,7 @@ public final class Jours {
 		this.listedeDonnes.add(listedeDonnes);
 	}
 	/**Remplace un élément à la postion*/
-	public void setListedeDonnes(ReleveDateHeureEau listedeDonnes, int position) {
+	public void setListedeDonnes(ReleveDateHeureEau listedeDonnes, int position) throws IndexOutOfBoundsException{
 		this.listedeDonnes.set(position, listedeDonnes);
 	}
 	

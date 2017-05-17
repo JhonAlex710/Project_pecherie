@@ -23,11 +23,11 @@ public class Lieu {
 		return anneeDeDonnes;
 	}
 	/**Renvoie l'élément à la position X*/
-	public Annee getAnneeDeDonnes(int postion) {
+	public Annee getAnneeDeDonnes(int postion) throws IndexOutOfBoundsException{
 		return anneeDeDonnes.get(postion);
 	}
 	/**Renvoie la position de l'ément passé en paramètre*/
-	public int getAnneeDeDonnes(Annee annee) {
+	public int getAnneeDeDonnes(Annee annee)  throws IndexOutOfBoundsException {
 		int compteur=0;
 		for (Annee annee2 : anneeDeDonnes) {
 			if (annee.getNumeroAnne()==annee2.getNumeroAnne()) {
@@ -47,7 +47,7 @@ public class Lieu {
 	/**
 	 * Ajout d'une annee  à la liste
 	 * */
-	public void setAnneeDeDonnes(int position,Annee moisDeDonnes) {
+	public void setAnneeDeDonnes(int position,Annee moisDeDonnes) throws IndexOutOfBoundsException{
 		anneeDeDonnes.set(position,moisDeDonnes);
 	}
 	

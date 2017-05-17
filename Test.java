@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import analyseCSV.AnalyserUnFichierDonnes;
 import analyseCSV.ParserFichierNiveauMarin;
 import donne.NiveauMarin;
-
+/**
+ * @author jeanpaul
+ * Classe de teste
+ * */
 public class Test {
 
 	private ArrayList<NiveauMarin> resultat;

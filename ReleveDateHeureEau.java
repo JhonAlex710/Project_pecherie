@@ -19,8 +19,7 @@ public class ReleveDateHeureEau {
 	 * Affiche à l'écrant tous ce qui est contenu dans l'object
 	 * */
 	public void afficher() {
-		System.out.println("nomDuLieu "+nomDuLieu+" HauteurEau "+HauteurEau+
-				" dateDuReleve annee ");
+		System.out.println("nomDuLieu "+nomDuLieu+" HauteurEau "+HauteurEau);
 		dateDuReleve.afficher();
 	}
 }

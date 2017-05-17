@@ -2,26 +2,27 @@ package analyseCSV;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import donne.Calendrier;
 import donne.ReleveDateHeureEau;
-import test.Test;
-
+/**
+ * Sert à analyser un ensemble de donnée de port breton
+ * @author jeanpaul
+ * Il reste des modification à faire
+ * */
 public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV {
 
 	private ArrayList<String[]> ensembleDeFichier;
 	public AnalyserUnFichierDonnes() {
 		// TODO Auto-generated constructor stub
+		super();
 		ensembleDeFichier = new ArrayList<>();
-		String chemin="/home/jeanpaul/Bureau/ter/Maree/Brest/201501.CSV";
+		String chemin="/home/jeanpaul/Bureau/ter/Maree/";
 		listerFichier(new File(chemin));
 	}
-	
-
 	/**
-	 * SertA Repertorier l'ensemble des dossiers et Fichiers
+	 * Sert a Repertorier l'ensemble des dossiers et Fichiers
 	 * Elle est récursive dans les dossiers
 	 * @param fichier servant àsavoir si c'est dossier ou pas
 	 * */
@@ -36,14 +37,19 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 			}
 		}
 	}
-	
-	private void conversion(String cheminEtNomFichier) {
+	/**
+	 * Converti un fichier en un série d'object
+	 * @param cheminEtNomFichier adresse du fichier
+	 * @return {@link ArrayList}{@link ReleveDateHeureEau} ensemble de sorti sous forme de liste
+	 * */
+	private ArrayList<ReleveDateHeureEau> conversion(String cheminEtNomFichier) {
 		String nomLieu= new File(new File(cheminEtNomFichier).getParent()).getName();
 		double hauteurDEau;
 		String[] date,heure;
 		boolean test = true;
 		Calendrier temps;
 		List<String[]> reultat = readCsvFile(cheminEtNomFichier, ';');
+		ArrayList<ReleveDateHeureEau> ensembledeSortie= new ArrayList<>();
 		for (String[] strings : reultat) {
 			test = true;
 			if (!strings[0].contains("Site")&& !strings[0].contains("horaire")&& !strings[0].contains("Jour")) {
@@ -52,8 +58,8 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 				heure = strings[1].split(":");
 				try {
 					hauteurDEau = Double.parseDouble(strings[2]);
-					temps = new Calendrier(Integer.parseInt(date[0]), 
-							Integer.parseInt(date[1]), Integer.parseInt(date[2]), 
+					temps = new Calendrier(Integer.parseInt(date[2]), 
+							Integer.parseInt(date[1]), Integer.parseInt(date[0]), 
 							Integer.parseInt(heure[0]), Integer.parseInt(heure[1]), 0);
 				} catch (NullPointerException e) {
 					// TODO: handle exception
@@ -70,21 +76,17 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 					temps= new Calendrier();
 					test = false;
 				}
-				if (test==true) {
-					new ReleveDateHeureEau(hauteurDEau, nomLieu, temps).afficher();
-				}
-				
+				if (test==true) { ensembledeSortie.add(new ReleveDateHeureEau(hauteurDEau, nomLieu, temps));}
 			}
-			/*GregorianCalendar dateDuReleve = 
-					new GregorianCalendar(year, month, dayOfMonth, hourOfDay, minute);*/
-		//	new ReleveDateHeureEau(HauteurEau, lieu, dateDuReleve);
 		}
-		
+		return ensembledeSortie;
 	}
+	
 	public void importerReleveDateHeureEauLieu() {
 		for (String[] strings : ensembleDeFichier) {
-			//System.out.println(strings[1]+strings[0]);
-			conversion(strings[1]/*+strings[0]*/);
+			System.out.println(strings[1]+strings[0]);
+			System.out.println(conversion(strings[1]/*+strings[0]*/).size());
+			conversion(strings[1]/*+strings[0]*/).size();
 		}
 	}
 	/*public ArrayList<ReleveDateHeureEau> analyserUnFichierDonnesHauteurEau() {

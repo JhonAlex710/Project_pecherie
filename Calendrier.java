@@ -34,7 +34,7 @@ public class Calendrier {
 
 	public void afficher() {
 		// TODO Auto-generated method stub
-		System.out.println("jour" + jour+ " mois "+mois+" annee "+annee+" heure "+heure+ " minute "+minute+" seconde " +seconde);
+		System.out.println("jour " + jour+ " mois "+mois+" annee "+annee+" heure "+heure+ " minute "+minute+" seconde " +seconde);
 	}
 	
 	public int getJour() {

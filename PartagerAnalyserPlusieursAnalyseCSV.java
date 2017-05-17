@@ -16,7 +16,13 @@ public abstract class PartagerAnalyserPlusieursAnalyseCSV {
 	public PartagerAnalyserPlusieursAnalyseCSV() {
 		// TODO Auto-generated constructor stub
 	}
-
+	/**
+	 * Convertit un fichier en un tableau de string, permet de convertir un fichier CSV quelconque 
+	 * en un tableau de cahine de caractère
+	 * @param fileName file d'ariane juqu'au fichier inclus
+	 * @param separator caractère servant à séparé deux chaine de caractères.
+	 * @return {@link String}[] tableau à analyser et à convertir
+	 * */
 	protected static List<String[] > readCsvFile(String fileName, char separator) {
         final List<String[] > data = new ArrayList<String[] >();
 

@@ -5,11 +5,13 @@ import java.util.List;
 
 import donne.NiveauMarin;
 /**
- * 
+ * Converite le niveau générale du fonds des océans sous forme de fichiers en une série d'object
+ * @author jeanpaul
  * */
 public class ParserFichierNiveauMarin extends PartagerAnalyserPlusieursAnalyseCSV{
 	public ParserFichierNiveauMarin() {
 		// TODO Auto-generated constructor stub
+		super();
 	}
 	/**
 	 * On parse le fichier /home/jeanpaul/Bureau/ter/Donnees_Niveau Marin_BZH.csv

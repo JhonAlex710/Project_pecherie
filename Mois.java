@@ -8,9 +8,19 @@ import java.util.ArrayList;
 public final class Mois {
 	private ArrayList<Jours> listedeJours=new ArrayList<>(31);
 	private final int numeroMois;
-	public Mois(int numeroMois) {
+	private final int numeroMoisAnnee;
+	private final String lieu;
+	/*public Mois(int numeroMois) {
 		// TODO Auto-generated constructor stub
 		this.numeroMois=numeroMois;
+		numeroMoisAnnee=0;
+		lieu=null;
+	}*/
+	public Mois(int numeroMois,int numeroMoisAnnee,String lieu) {
+		// TODO Auto-generated constructor stub
+		this.numeroMois=numeroMois;
+		this.numeroMoisAnnee=numeroMoisAnnee;
+		this.lieu=lieu;
 	}
 	/**
 	 * Renvoie la liste de tous les jours
@@ -43,6 +53,14 @@ public final class Mois {
 	 * */
 	public int getNumeroMois() {
 		return numeroMois;
+	}
+	/**renvoie l'annee*/
+	public int getNumeroMoisAnnee() {
+		return numeroMoisAnnee;
+	}
+	/**Renvoie le lieu*/
+	public String getLieu() {
+		return lieu;
 	}
 	/**
 	 * Posiblité de changer la collection

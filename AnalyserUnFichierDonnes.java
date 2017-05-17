@@ -91,7 +91,9 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 			}
 		}
 		/*Transformation de Arralist de ReleveDateHeureEau en 1 mois*/
-		Mois mois = new Mois(ensembledeSortie.get(0).getDateDuReleve().getMois());
+		Mois mois = new Mois(ensembledeSortie.get(0).getDateDuReleve().getMois(),
+				ensembledeSortie.get(0).getDateDuReleve().getAnnee(),
+				ensembledeSortie.get(0).getNomDuLieu());
 		for (ReleveDateHeureEau releveDateHeureEau : ensembledeSortie) {
 			if (mois.getListedeJours().size()==0) {
 				mois.setListedeJours(new Jours(releveDateHeureEau.getDateDuReleve()
@@ -115,33 +117,59 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 		return mois;
 		//return null;
 	}
-	/*private ArrayList<Annee> transformationAnne(ArrayList<Mois> resultat) {
-		// TODO Auto-generated method stub
-		ArrayList<Annee> ensembleDeSortie = new ArrayList<>();
+	/**
+	 * fusion des mois en années puis en Lieu
+	 * */
+	private ArrayList<Lieu> transformation(ArrayList<Mois> resultat) {
+		ArrayList<Lieu> listedeLieu = new ArrayList<>();
 		for (Mois mois : resultat) {
-			if (ensembleDeSortie.size()==0) {
-				ensembleDeSortie.add(new Annee(resultat.get(0).getListedeJours(0).getListedeDonnes(0).
-						getDateDuReleve().getAnnee()));
-				ensembleDeSortie.get(0).
+			boolean testAnnne=false,testLieu=false;
+			int positionLieu=0, positionAnnee=0;
+			for (Lieu lieu : listedeLieu) {
+				if (lieu.getNomDuLieu().contains(mois.getLieu())) {
+					testLieu=true;
+					for (Annee annee : lieu.getAnneeDeDonnes()) {
+						if (mois.getNumeroMoisAnnee()==annee.getNumeroAnne()) {
+							testAnnne=true;
+							break;
+						} else {
+							positionAnnee=positionAnnee+1;
+						}
+					}
+					break;
+				} else {
+					positionLieu=positionLieu+1;
+				}
+			}
+			if (testLieu) {
+				if (testAnnne) {
+					listedeLieu.get(positionLieu).getAnneeDeDonnes(positionAnnee).setListeDeMois(mois);
+				} else {
+					Annee annee = new Annee(mois.getNumeroMoisAnnee());
+					annee.setListeDeMois(mois);
+					listedeLieu.get(positionLieu).setAnneeDeDonnes(annee);
+				}
 			} else {
-
+				Lieu lieu = new Lieu(mois.getLieu());
+				lieu.setAnneeDeDonnes(new Annee(mois.getNumeroMois()));
+				lieu.getAnneeDeDonnes(0).setListeDeMois(mois);
+				listedeLieu.add(lieu);
 			}
 		}
-		return ensembleDeSortie;
-	}*/
+		return listedeLieu;
+	}
 	/**
 	 * Convertits les fichiers CSV en object. Ce ne sont des hauteurs d'eau, en des lieu. 
+	 * @return 
 	 * @return {@link ArrayList}{@link ReleveDateHeureEau} liste du contenu des fichiers
 	 * */
 	//private ArrayList<Lieu> importerReleveDateHeureEauLieu() {
-	public void importerReleveDateHeureEauLieu() {
+	public ArrayList<Lieu> importerReleveDateHeureEauLieu() {
 		ArrayList<Mois> resultat = new ArrayList<>();
 		for (String[] strings : ensembleDeFichier) {
 			//System.out.println(strings[1]);
 			resultat.add(conversion(strings[1]/*+strings[0]*/));
 		}
-		System.out.println(resultat.size());
-		//return resultat;
-		//ArrayList<Annee> resultatAnne= transformationAnne(resultat);
+		return transformation(resultat);
 	}
 }

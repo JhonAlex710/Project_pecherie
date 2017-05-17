@@ -45,6 +45,12 @@ public class Lieu {
 		anneeDeDonnes = moisDeDonnes;
 	}
 	/**
+	 * Ajout d'un élement dans la liste
+	 * */
+	public void setAnneeDeDonnes(Annee moisDeDonnes) {
+		anneeDeDonnes.add(moisDeDonnes);
+	}
+	/**
 	 * Ajout d'une annee  à la liste
 	 * */
 	public void setAnneeDeDonnes(int position,Annee moisDeDonnes) throws IndexOutOfBoundsException{

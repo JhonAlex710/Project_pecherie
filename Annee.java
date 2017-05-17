@@ -8,9 +8,16 @@ import java.util.ArrayList;
 public final class Annee {
 	private ArrayList<Mois> listeDeMois=new ArrayList<>(12);
 	private final int numeroAnne;
+	private final String lieu;
 	public Annee(int numeroAnne) {
 		// TODO Auto-generated constructor stub
 		this.numeroAnne=numeroAnne;
+		lieu="";
+	}
+	public Annee(int numeroAnne,String lieu) {
+		// TODO Auto-generated constructor stub
+		this.numeroAnne=numeroAnne;
+		this.lieu=lieu;
 	}
 	/**
 	 * Renvoie l'ensemble de la liste
@@ -39,6 +46,12 @@ public final class Annee {
 	 * */
 	public int getNumeroAnne() {
 		return numeroAnne;
+	}
+	/**
+	 * @return the lieu
+	 */
+	public String getLieu() {
+		return lieu;
 	}
 	/**
 	 * Remplacement de liste intégrale du mois*/

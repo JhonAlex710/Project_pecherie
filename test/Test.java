@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import analyseCSV.AnalyserUnFichierDonnes;
 import analyseCSV.ParserFichierNiveauMarin;
-import calcul.CourbeDeGausse;
 import donne.Lieu;
 import donne.NiveauMarin;
 /**
@@ -24,9 +23,7 @@ public class Test {
 		Test name = new Test();
 		name.testImportBarage();
 		name.testImportReleveveDateHeure();
-		
-		//A finir
-		name.fonctionDeGausse();
+		name.testCalculDeMaree();
 	}
 	/**
 	 * Test De l'importation du fichier générale
@@ -49,10 +46,13 @@ public class Test {
 		System.out.println("Test.testImportReleveveDateHeure Temps exécution "+tempsExecuter+ " millisecondes");
 	}
 	/**
-	 * Teste de la courbe de Gausse
+	 * Test de des calculs de moyenne de marre
 	 * */
-	public void fonctionDeGausse() {
-		new CourbeDeGausse(resultat);
-		System.out.println(Math.log(60));
+	public void testCalculDeMaree(){
+		long debut = System.currentTimeMillis();
+		resiltat2 = new AnalyserUnFichierDonnes().calculDesMarresMoyennes(resiltat2);
+		long tempsExecuter = System.currentTimeMillis()-debut;
+		System.out.println("Test.testCalculDeMaree resultat2.size() "+resiltat2.size());
+		System.out.println("Test.testCalculDeMaree Temps exécution "+tempsExecuter+ " millisecondes");
 	}
 }

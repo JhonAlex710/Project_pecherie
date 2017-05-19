@@ -6,7 +6,7 @@ import java.util.List;
 
 import donne.Annee;
 import donne.Calendrier;
-import donne.CommunAuDonne;
+import donne.CommunAuxDonne;
 import donne.Jours;
 import donne.Lieu;
 import donne.Mois;
@@ -18,14 +18,14 @@ import donne.ReleveDateHeureEau;
  * */
 public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV {
 
-	private static final boolean BASSE = true;
-	private static final boolean HAUTE = false;
+	//private static final boolean BASSE = true;
+	//private static final boolean HAUTE = false;
 	private ArrayList<String[]> ensembleDeFichier;
 	public AnalyserUnFichierDonnes() {
 		// TODO Auto-generated constructor stub
 		super();
 		ensembleDeFichier = new ArrayList<>();
-		String chemin="/home/jeanpaul/Bureau/ter/Maree/";
+		String chemin=System.getProperty("user.home")+"/ter/Maree/";
 		listerFichier(new File(chemin));
 	}
 	/**
@@ -91,7 +91,9 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 					temps= new Calendrier();
 					test = false;
 				}
-				if (test==true) { ensembledeSortie.add(new ReleveDateHeureEau(hauteurDEau, nomLieu, temps));}
+				if (test==true) {
+					ensembledeSortie.add(new ReleveDateHeureEau(hauteurDEau, nomLieu, temps));
+				}
 			}
 		}
 		return ensembledeSortie;
@@ -100,26 +102,32 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 		Mois mois = new Mois(ensembledeSortie.get(0).getDateDuReleve().getMois(),
 				ensembledeSortie.get(0).getDateDuReleve().getAnnee(),
 				ensembledeSortie.get(0).getNomDuLieu());
+		//System.out.println(ensembledeSortie.get(0).getNomDuLieu());
+		//Mois mois = new Mois(ensembledeSortie.get(0).getDateDuReleve().getMois());
 		for (ReleveDateHeureEau releveDateHeureEau : ensembledeSortie) {
-			if (mois.getListeDeDonne().size()==0) {
+			if (mois.getListeDeDonne2().size()==0) {
 				Jours jour = new Jours(releveDateHeureEau.getDateDuReleve().getJour());
-				jour.setListeDeDonne2(releveDateHeureEau);
-				//mois.getListeDeDonne(0).setListeDeDonne(releveDateHeureEau);
+				jour.setListeDeDonne(releveDateHeureEau);
 				mois.setListeDeDonne(jour);
 			} else {
 				try {
 					Jours position = (Jours) mois.getListeDeDonne(releveDateHeureEau.getDateDuReleve().getJour());
 					int numeroJours = mois.getListeDeDonne(position);
-					position.setListeDeDonne2(releveDateHeureEau);
+					position.setListeDeDonne(releveDateHeureEau);
 					mois.setListeDeDonne(numeroJours,position);
 				} catch (IndexOutOfBoundsException e) {
 					// TODO: handle exception
 					Jours position=new Jours(releveDateHeureEau.getDateDuReleve().getJour());
-					position.setListeDeDonne2(releveDateHeureEau);
+					position.setListeDeDonne(releveDateHeureEau);
 					mois.setListeDeDonne(position);
 				}
 			}
+			
 		}
+		//mois.afficher();
+		/*for (Arbre releveDateHeureEau : mois.getListeDeDonne()) {
+			releveDateHeureEau.afficher();
+		}*/
 		return mois;
 	}
 	/**
@@ -128,46 +136,59 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 	 * @return {@link ArrayList}{@link Lieu} liste des différents lieu avec mois, annee 
 	 * et les différents relevées
 	 * */
-	private ArrayList<Lieu> transformation(ArrayList<Mois> resultat) {
+	private ArrayList<Lieu> transformation(ArrayList<Mois> entre) {
 		//long debut = System.currentTimeMillis(),fin;
-		ArrayList<Lieu> listedeLieu = new ArrayList<>();
-		for (Mois mois : resultat) {
-			boolean testAnnne=false,testLieu=false;
-			int positionLieu=0, positionAnnee=0;
-			for (Lieu lieu : listedeLieu) {
-				if (lieu.getNom().contains(mois.getNomDuLieu())) {
-					testLieu=true;
-					for (CommunAuDonne annee : lieu.getListeDeDonne()) {
-						if (mois.getAnnee()==annee.getNumero()) {
-							testAnnne=true;
-							break;
-						} else {
-							positionAnnee=positionAnnee+1;
-						}
-					}
+		ArrayList<Lieu> sorti = new ArrayList<>();
+		ArrayList<Annee> tps = conversitionMoisAnnee(entre);
+		for (Annee annee : tps) {
+			int compteur1=0; boolean test=false;
+			for (Lieu Lieu : sorti) {
+				if (Lieu.getNom().contains(annee.getNomDuLieu())) {
+					test=true;
 					break;
-				} else {
-					positionLieu=positionLieu+1;
+				}else {
+					compteur1= compteur1+1;
 				}
 			}
-			if (testLieu) {
-				if (testAnnne) {
-					listedeLieu.get(positionLieu).getListeDeDonne(positionAnnee).setListeDeDonne(mois);
-				} else {
-					Annee annee = new Annee(mois.getAnnee());
-					annee.setListeDeDonne(mois);
-					listedeLieu.get(positionLieu).setListeDeDonne(annee);
-				}
+			Lieu lieu;
+			if (test==true) {
+				lieu = sorti.get(compteur1);
+				lieu.setListeDeDonne(annee);
+				sorti.set(compteur1, lieu);
 			} else {
-				Lieu lieu = new Lieu(mois.getNomDuLieu());
-				lieu.setListeDeDonne(new Annee(mois.getNumero()));
-				lieu.getListeDeDonne(0).setListeDeDonne(mois);
-				listedeLieu.add(lieu);
+				lieu = new Lieu(annee.getNomDuLieu());
+				lieu.setListeDeDonne(annee);
+				sorti.add(lieu);
 			}
 		}
-		//fin=System.currentTimeMillis()-debut;
-		//System.out.println("A ssemblage dans lieu" + fin);
-		return listedeLieu;
+		return sorti;
+	}
+	private ArrayList<Annee> conversitionMoisAnnee(ArrayList<Mois> entre) {
+		// TODO Auto-generated method stub
+		ArrayList<Annee> sorti = new ArrayList<>();
+		for (Mois mois : entre) {
+			int compteur1=0; boolean test=false;
+			for (Annee annee : sorti) {
+				if (annee.getNumero()==mois.getAnnee() && 
+						annee.getNomDuLieu().contains(mois.getNomDuLieu())) {
+					test=true;
+					break;
+				}else {
+					compteur1= compteur1+1;
+				}
+			}
+			Annee annee;
+			if (test==true) {
+				annee = sorti.get(compteur1);
+				annee.setListeDeDonne(mois);
+				sorti.set(compteur1, annee);
+			} else {
+				annee = new Annee(mois.getAnnee(), mois.getNomDuLieu());
+				annee.setListeDeDonne(mois);
+				sorti.add(annee);
+			}
+		}
+		return sorti;
 	}
 	/**
 	 * Convertits les fichiers CSV en object. Ce ne sont des hauteurs d'eau, en des lieu. 
@@ -176,102 +197,115 @@ public class AnalyserUnFichierDonnes extends PartagerAnalyserPlusieursAnalyseCSV
 	 * */
 	public ArrayList<Lieu> importerReleveDateHeureEauLieu() {
 		ArrayList<Mois> resultat = new ArrayList<>();
+		ArrayList<Lieu> sorti = new ArrayList<>();
 		for (String[] strings : ensembleDeFichier) {
 			resultat.add((Mois)mareHauteBasse(conversionMois(conversion(strings[1]))));
 		}
-		ArrayList<Lieu> transition= new ArrayList<>();
 		for (Lieu lieu : transformation(resultat)) {
-			transition.add((Lieu)mareHauteBasse(lieu));
+			sorti.add((Lieu) mareHauteBasse(lieu));
 		}
-		return transition;
+		return sorti;
 	}
-	private CommunAuDonne mareHauteBasse(CommunAuDonne entree) {
+	private CommunAuxDonne mareHauteBasse(CommunAuxDonne entree) {
 		// TODO Auto-generated method stub
-		ReleveDateHeureEau marreBasseExceprion=null,marreHauteExceprion=null;
-		CommunAuDonne sorti;
-		if (entree.getClass()==Lieu.class || entree.getClass()==Mois.class) {
-			CommunAuDonne transition,lieu;
-			if (entree.getClass()==Lieu.class) {
-				lieu =(Lieu)entree;Lieu test=(Lieu)entree;
-				sorti= new Lieu(test.getNom());
-				transition = new Lieu(test.getNom());
-				for (CommunAuDonne  annee: lieu.getListeDeDonne()) {
-					transition.setListeDeDonne(mareHauteBasse((Annee)annee));
-				}
-			} else {
-				lieu =(Mois)entree;Mois test=(Mois)entree;
-				sorti = new Mois(test.getNumero(), lieu.getNumero(), test.getNomDuLieu());
-				transition= new Mois(test.getNumero(), test.getAnnee(), test.getNomDuLieu());
-				for (CommunAuDonne  annee: lieu.getListeDeDonne()) {
-					transition.setListeDeDonne(mareHauteBasse((Jours)annee));
-				}
+		CommunAuxDonne sorti=entree;
+		if (entree.getClass()==Jours.class) {
+			Jours entree2 = (Jours) entree;
+			sorti= new Jours(entree.getNumero());
+			sorti = traitement2((Jours)sorti, entree2);
+		} else if (entree.getClass()==Mois.class) {
+			Mois entree2 = (Mois) entree;
+			int compteur = 0;
+			for (Jours jours : entree2.getListeDeDonne()) {
+				entree2.setListeDeDonne(compteur, (Jours) mareHauteBasse(jours));
+				compteur=compteur+1;
 			}
-			entree=transition;
-			
+			sorti= new Mois(entree2.getNumero(), entree2.getAnnee(), entree2.getNomDuLieu());
+			sorti = traitement(sorti, entree2);
 		} else if (entree.getClass()==Annee.class) {
-			sorti = new Annee(entree.getNumero());
-		} else {
-			sorti = new Jours(entree.getNumero());
-		}
-		try {
-			marreBasseExceprion = entree.getListeDeDonne(0).getMarreBasseExceprion();
-			marreHauteExceprion = entree.getListeDeDonne(0).getMarreHauteExceprion();
-		} catch (Exception e) {
-			// TODO: handle exception
-			sorti=entree;
-		}
-		if (!(marreBasseExceprion==null) && !(marreHauteExceprion==null) ) {
-			int compteur=0;double somme=0;
-			if (entree.getClass()==Jours.class) {
-				Jours tps = (Jours) entree;
-				for (ReleveDateHeureEau releve : tps.getListeDeDonne2()) {
-					if (marreBasseExceprion.getHauteurEau()>releve.getHauteurEau()) {
-						marreBasseExceprion=releve;
-					}
-					if (marreHauteExceprion.getHauteurEau()<releve.getHauteurEau()) {
-						marreHauteExceprion=releve;
-					}
-					somme=somme+releve.getHauteurEau();
-					compteur=compteur+1;
-				}
-			} else {
-				for (CommunAuDonne annee : entree.getListeDeDonne()) {
-					if (marreBasseExceprion.getHauteurEau()>annee.getMarreBasseExceprion().getHauteurEau()) {
-						marreBasseExceprion=annee.getMarreBasseExceprion();
-					}
-					if (marreHauteExceprion.getHauteurEau()<annee.getMarreHauteExceprion().getHauteurEau()) {
-						marreHauteExceprion=annee.getMarreHauteExceprion();
-					}
-					somme=somme+annee.getHauteurEauMoyenne();
-					compteur=compteur+1;
-				}
+			Annee entree2 = (Annee) entree;
+			sorti = new Annee(entree2.getNumero());
+			sorti = traitement(sorti, entree2);
+		} else if (entree.getClass()==Lieu .class) {
+			Lieu entree2 = (Lieu) entree;
+			int compteur = 0;
+			for (Annee annee : entree2.getListeDeDonne()) {
+				entree2.setListeDeDonne(compteur, (Annee) mareHauteBasse(annee)); 
+				compteur=compteur+1;
 			}
-			sorti.setHauteurEauMoyenne(somme/compteur);
-			sorti.addMarreeBasse(marreBasseExceprion);
-			sorti.addMarreeHaute(marreHauteExceprion);
-			sorti.setListeDeDonne(entree.getListeDeDonne());
+			sorti = new Lieu(entree2.getNom());
+			sorti = traitement(sorti, entree2);
+		} 
+		return sorti;
+	}
+	private Jours traitement2(Jours sorti, Jours entree2) {
+		// TODO Auto-generated method stub
+		ReleveDateHeureEau marreBasseExceprion=entree2.getListeDeDonne(0),
+				marreHauteExceprion=entree2.getListeDeDonne(0);
+		for (ReleveDateHeureEau releve : entree2.getListeDeDonne()) {
+			if (releve.getHauteurEau()>marreHauteExceprion.getHauteurEau()) {
+				marreHauteExceprion=releve;
+			}
+			if (releve.getHauteurEau()<marreBasseExceprion.getHauteurEau()) {
+				marreBasseExceprion=releve;
+			}
 		}
+		sorti.setListeDeDonne(entree2.getListeDeDonne());
+		sorti.addMarreeBasse(marreBasseExceprion);
+		sorti.addMarreeHaute(marreHauteExceprion);
+		return sorti;
+	}
+	private CommunAuxDonne traitement(CommunAuxDonne sorti,CommunAuxDonne entree) {
+		ReleveDateHeureEau marrebasse = entree.getListeDeDonne2().get(0).getMarreBasseExceprion(),
+				marrehaute = entree.getListeDeDonne2().get(0).getMarreHauteExceprion();
+		for (CommunAuxDonne strings : entree.getListeDeDonne2()) {
+			if (marrebasse.getHauteurEau()>strings.getMarreBasseExceprion().getHauteurEau()) {
+				marrebasse=strings.getMarreBasseExceprion();
+			}
+			if (marrehaute.getHauteurEau()>strings.getMarreHauteExceprion().getHauteurEau()) {
+				marrehaute=strings.getMarreHauteExceprion();
+			}
+		}
+		sorti.setListeDeDonne2(entree.getListeDeDonne2());
+		sorti.addMarreeBasse(marrebasse);
+		sorti.addMarreeHaute(marrehaute);
 		return sorti;
 	}
 	/**
 	 * 
 	 * */
-	public ArrayList<Lieu> calculDesMarresMoyennes(ArrayList<Lieu> entree) {
+/*	public void calculDesMarresMoyennes(ArrayList<Lieu> entree) {
 		// TODO Auto-generated method stub
-		ArrayList<Lieu> resultat = new ArrayList<>();
 		for (Lieu lieu : entree) {
-			lieu=calculmare(lieu,BASSE);
-			lieu=calculmare(lieu,HAUTE);
+			marreeBasse = calculmare(lieu,lieu.getHauteurEauMoyenne(),BASSE);
+			marrehaute = calculmare(lieu,lieu.getHauteurEauMoyenne(),HAUTE);
 		}
-		return resultat;
+		return ;
 	}
-	private Lieu calculmare(CommunAuDonne entre, boolean test) {
+	private ArrayList<ReleveDateHeureEau> calculmare(CommunAuDonne entre, double moyenne,boolean test) {
 		// TODO Auto-generated method stub
-		/*if () {
-			
-		}*/
-		
-		return null;
+		ArrayList<ReleveDateHeureEau> listemaree = new ArrayList<>();
+		for (Object integer2 : entre.getListeDeDonne()) {
+			CommunAuxDonne integer = (CommunAuxDonne)integer2;
+			if (entre.getClass()==Jours.class) {
+				Jours tps = (Jours) entre;
+				for (Object releve2 : tps.getListeDeDonne()) {
+					ReleveDateHeureEau releve = (ReleveDateHeureEau)releve2;
+					if ( (releve.getHauteurEau()<moyenne && test==BASSE) || (releve.getHauteurEau()>moyenne && test==HAUTE)){
+						listemaree.add(releve);
+					} 
+				}
+			} else {
+				listemaree.addAll(calculmare(integer, integer.getHauteurEauMoyenne(), test));
+			}
+		}
+		return listemaree;
 	}
+	public ArrayList<ReleveDateHeureEau> getMarreeBasse() {
+		return marreeBasse;
+	}
+	public ArrayList<ReleveDateHeureEau> getMarrehaute() {
+		return marrehaute;
+	}*/
 	
 }

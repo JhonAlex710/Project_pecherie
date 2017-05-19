@@ -18,7 +18,7 @@ public class ParserFichierNiveauMarin extends PartagerAnalyserPlusieursAnalyseCS
 	 * @return {@link ArrayList}{@link NiveauMarin} renvoie le résultat du parse
 	 * */
 	public ArrayList<NiveauMarin> barrage(){
-		String fileName="/home/jeanpaul/Bureau/ter/Donnees_Niveau Marin_BZH.csv";
+		String fileName=System.getProperty("user.home")+"/ter/Donnees_Niveau Marin_BZH.csv";
 		List<String[]> reultat = readCsvFile(fileName, ';');
 		ArrayList<NiveauMarin> listeMarin=new ArrayList<NiveauMarin>(reultat.size());
 		for (String[] strings : reultat) {

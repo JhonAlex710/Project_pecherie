@@ -1,45 +1,34 @@
 package donne;
 
-import java.util.ArrayList;
-
-public abstract class CommunAuxDonne implements CommunAuDonne {
+public abstract class CommunAuxDonne implements test {
 
 	public CommunAuxDonne(int numero) {
 		// TODO Auto-generated constructor stub
 		this.numero=numero;
-		listedeDonne = new ArrayList<CommunAuDonne>();
+		//listedeDonne = new ArrayList<Arbre>(max);
 	}
+	public static final int NULL=-1;
 	private final int numero;
 	private double hauteurEauMoyenne;
-	protected ArrayList<CommunAuDonne> listedeDonne;
-	private ReleveDateHeureEau marreHauteExceprion, marreBasseExceprion;
+	//protected ArrayList<Arbre> listedeDonne;
+	private ReleveDateHeureEau marreHauteExceprion=null, marreBasseExceprion=null;
 	private boolean testHautExt=true,testHautBas=true,testMoyenn=true;
-
+/*
 	@Override
-	public ArrayList<CommunAuDonne> getListeDeDonne() {
+	protected ArrayList<Arbre> getListeDeDonne() {
 		// TODO Auto-generated method stub
 		return listedeDonne;
 	}
 
 	@Override
-	public CommunAuDonne getListeDeDonne(int position) {
+	protected Arbre getListeDeDonne(int position) {
 		// TODO Auto-generated method stub
 		return listedeDonne.get(position);
 	}
 
 	@Override
-	public int getListeDeDonne(CommunAuDonne moi) {
-		int compteur=0;
-		for (CommunAuDonne mois2 : listedeDonne) {
-			if (moi.getNumero()==mois2.getNumero()) {
-				break;
-			} else {
-				compteur=compteur+1;
-			}
-		}
-		return compteur;
-	}
-
+	public abstract int getListeDeDonne(Arbre entree) ;
+*/
 	@Override
 	public int getNumero() {
 		// TODO Auto-generated method stub
@@ -70,24 +59,24 @@ public abstract class CommunAuxDonne implements CommunAuDonne {
 			testMoyenn=false;
 		}
 	}
-
+/*
 	@Override
-	public void setListeDeDonne(ArrayList<CommunAuDonne> listedeDonne) {
+	void setListeDeDonne(ArrayList<Arbre> listedeDonne) {
 		// TODO Auto-generated method stub
 		this.listedeDonne=listedeDonne;
 	}
 
 	@Override
-	public void setListeDeDonne(CommunAuDonne listeDeMois) {
+	public void setListeDeDonne(Arbre listeDeMois) {
 		// TODO Auto-generated method stub
 		this.listedeDonne.add(listeDeMois);
 	}
 
 	@Override
-	public void setListeDeDonne(int position, CommunAuDonne Donnee) {
+	protected void setListeDeDonne(int position, Arbre Donnee) {
 		// TODO Auto-generated method stub
 		this.listedeDonne.set(position, Donnee);
-	}
+	}*/
 
 	@Override
 	public void addMarreeHaute(ReleveDateHeureEau marreHauteExceprion) {
